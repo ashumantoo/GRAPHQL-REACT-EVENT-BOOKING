@@ -7,11 +7,15 @@ const app = express();
 
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlResolver = require('./graphql/resolvers/index');
+const isAuth = require('./middleware/is-auth');
 
 const PORT = process.env.PORT || 8002;
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@firstcluster-1gkcp.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
 app.use(bodyParser.json());
+
+//checking the user Authentication for every request before request hitting to the graphql api
+app.use(isAuth);
 
 app.use('/graphql', graphqlHttp({
     schema: graphQlSchema,
